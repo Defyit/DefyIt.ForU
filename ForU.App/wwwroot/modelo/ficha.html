@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- ✅ ADICIONADO - Meta tags para controle de cache -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Ficha do Cliente - Sistema de Atendimento</title>
+
+    <!-- Bootstrap 5.3.8 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Tabler Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos Customizados -->
+    <link href="ficha.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script>
+      // Proteção imediata contra F5
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "F5" || (e.ctrlKey && e.key === "r")) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      });
+
+      // Adicionar ao histórico imediatamente
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, null, window.location.pathname);
+      }
+    </script>
+
+    <!-- Navbar Principal -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light px-3 d-flex align-items-center"
+    >
+      <a class="navbar-brand" href="#">
+        <img
+          src="https://s3.defyit.com.br/defyit/logo.svg"
+          alt="Logo"
+          height="40"
+        />
+      </a>
+
+      <!-- Botões de ícones à esquerda -->
+      <div class="d-flex align-items-center gap-2 ms-4">
+        <button class="icon-btn active" title="Atendimento">
+          <i class="bi bi-headset"></i>
+        </button>
+        <button class="icon-btn" title="Agenda">
+          <i class="bi bi-calendar3"></i>
+        </button>
+        <button class="icon-btn" title="Relatórios">
+          <i class="bi bi-graph-up"></i>
+        </button>
+      </div>
+
+      <!-- Área direita com botões adicionais, badges e usuário -->
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <!-- Botões adicionais -->
+        <div class="d-flex align-items-center gap-2">
+          <button class="icon-btn" title="Configurações">
+            <i class="bi bi-gear"></i>
+          </button>
+          <button class="icon-btn" title="Notificações">
+            <i class="bi bi-bell"></i>
+          </button>
+          <button class="icon-btn" title="Histórico">
+            <i class="bi bi-clock-history"></i>
+          </button>
+          <button
+            class="icon-btn theme-toggle"
+            title="Alterar Tema"
+            id="themeToggle"
+          >
+            <i class="bi bi-sun-fill theme-icon sun-icon"></i>
+            <i
+              class="bi bi-moon-fill theme-icon moon-icon position-absolute"
+            ></i>
+          </button>
+          <button class="icon-btn" title="Ajuda">
+            <i class="bi bi-question-circle"></i>
+          </button>
+        </div>
+
+        <!-- Badges de status e tempo -->
+        <div class="d-flex flex-column align-items-end gap-1">
+          <div class="d-flex align-items-center gap-2">
+            <span class="dialer-badge" id="dialerBadge">OLOS</span>
+            <span class="status-badge status-logado" id="statusBadge"
+              >Logado</span
+            >
+            <span class="time-badge" id="statusTime">00:05:32</span>
+          </div>
+        </div>
+
+        <!-- Dropdown do usuário -->
+        <div class="dropdown">
+          <a
+            class="d-flex align-items-center text-decoration-none dropdown-toggle"
+            href="#"
+            role="button"
+            id="userDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+            <span class="text-primary fw-semibold">Nome do Usuário</span>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="userDropdown"
+          >
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Configurações</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Navbar de Tabs -->
+    <nav class="tabs-navbar">
+      <ul class="nav" id="pills-tab" role="tablist">
+        <!-- ABA OPERAÇÃO (LABEL - NÃO CLICÁVEL) -->
+        <li class="nav-item">
+          <span class="nav-link disabled bg-secondary text-white">
+            <i class="bi bi-flag"></i> PICPAY
+          </span>
+        </li>
+
+        <!-- ABA CHAT (INICIALMENTE OCULTA) -->
+        <li class="nav-item d-none" id="nav-item-chat">
+          <a
+            class="nav-link"
+            id="pills-chat-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-chat"
+            role="tab"
+            aria-controls="pills-chat"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="bi bi-magic"></i> IA
+          </a>
+        </li>
+
+        <!-- ABA ABORDAGEM (ATIVA) -->
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="pills-abordagem-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-abordagem"
+            role="tab"
+            aria-controls="pills-abordagem"
+            aria-selected="true"
+            href="#"
+          >
+            <i class="ti ti-message-circle-2"></i> Abordagem
+          </a>
+        </li>
+
+        <!-- Outras abas (INICIALMENTE OCULTAS) -->
+        <li class="nav-item d-none" id="nav-item-dados">
+          <a
+            class="nav-link"
+            id="pills-ficha-dados-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-dados"
+            role="tab"
+            aria-controls="pills-ficha-dados"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-id"></i> Dados Pessoais
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-endereco">
+          <a
+            class="nav-link"
+            id="pills-ficha-endereco-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-endereco"
+            role="tab"
+            aria-controls="pills-ficha-endereco"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-map-pin"></i> Endereço
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-mailing">
+          <a
+            class="nav-link"
+            id="pills-ficha-mailing-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-mailing"
+            role="tab"
+            aria-controls="pills-ficha-mailing"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-mail"></i> Dados do Mailing
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-produtos">
+          <a
+            class="nav-link"
+            id="pills-ficha-produtos-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-produtos"
+            role="tab"
+            aria-controls="pills-ficha-produtos"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-package"></i> Produtos
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-adicionais">
+          <a
+            class="nav-link"
+            id="pills-ficha-adicionais-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-adicionais"
+            role="tab"
+            aria-controls="pills-ficha-adicionais"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-users"></i> Adicionais
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-cobranca">
+          <a
+            class="nav-link"
+            id="pills-ficha-cobranca-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-cobranca"
+            role="tab"
+            aria-controls="pills-ficha-cobranca"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-credit-card"></i> Cobrança
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-script">
+          <a
+            class="nav-link"
+            id="pills-ficha-script-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-script"
+            role="tab"
+            aria-controls="pills-ficha-script"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-script"></i> Script Atendimento
+          </a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-item-resumo">
+          <a
+            class="nav-link"
+            id="pills-ficha-resumo-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-ficha-resumo"
+            role="tab"
+            aria-controls="pills-ficha-resumo"
+            aria-selected="false"
+            href="#"
+          >
+            <i class="ti ti-checkup-list"></i> Resumo Atendimento
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Container principal -->
+    <div class="container-fluid content-container">
+      <div class="container">
+        <div
+          class="p-4 mb-4 bg-light border rounded d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h5 class="mb-1 fw-bold">RICARDO CARRER</h5>
+            <small class="text-muted">
+              CAMPANHA CPF INFORMAÇÕES
+              <span class="text-secondary">ASASDFASDFASDFASD</span>
+            </small>
+          </div>
+          <div class="d-flex flex-column align-items-end">
+            <div
+              class="bg-body-secondary rounded-circle d-flex align-items-center justify-content-center mb-2"
+              style="width: 40px; height: 40px"
+            >
+              <i class="ti ti-user text-primary fs-5"></i>
+            </div>
+            <small class="text-muted">
+              Atendimento: <span id="tempoAtendimento">00:00:00</span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Campos Hidden para dados do sistema -->
+        <input
+          type="hidden"
+          id="clienteId"
+          value="123456789012345678901234567890"
+        />
+        <input type="hidden" id="projetoId" value="123456" />
+        <input type="hidden" id="chamadaId" value="call_789456123" />
+        <input
+          type="hidden"
+          id="gravacaoUrl"
+          value="https://gravacoes.exemplo.com/audio/123456789.mp3"
+        />
+        <input type="hidden" id="tempoLigacao" value="0" />
+      </div>
+
+      <div class="tab-content" id="pills-tabContent">
+        <!-- ABA ABORDAGEM (ATIVA) -->
+        <div
+          class="tab-pane fade show active"
+          id="pills-abordagem"
+          role="tabpanel"
+          aria-labelledby="pills-abordagem-tab"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-3">
+              <i class="ti ti-message-circle-2"></i> Abordagem
+            </h4>
+
+            <form id="formAbordagem">
+              <!-- Nome -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  id="nomeAbordagem"
+                  name="nomeAbordagem"
+                  class="form-control"
+                  placeholder="Nome"
+                  value="RICARDO CARRER"
+                  readonly
+                  required
+                />
+                <label for="nomeAbordagem">
+                  <i class="ti ti-user"></i> Nome
+                </label>
+              </div>
+
+              <!-- Telefone -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  id="telefoneAbordagem"
+                  name="telefoneAbordagem"
+                  class="form-control"
+                  placeholder="Telefone"
+                  value="(11) 99999-9999"
+                  readonly
+                  required
+                />
+                <label for="telefoneAbordagem">
+                  <i class="ti ti-phone"></i> Telefone
+                </label>
+              </div>
+
+              <!-- Informação sobre os dados -->
+              <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Informação:</strong> Os dados do cliente foram
+                carregados automaticamente do sistema de discagem.
+              </div>
+
+              <!-- Botão de envio com atalho visível -->
+              <button
+                type="submit"
+                class="btn btn-lg btn-primary"
+                title="Prosseguir (Ctrl + P)"
+              >
+                <i class="ti ti-device-floppy"></i> Prosseguir
+                <span class="badge bg-dark ms-2" style="font-size: 10px"
+                  >P</span
+                >
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ABA CHAT -->
+        <div
+          class="tab-pane fade"
+          id="pills-chat"
+          role="tabpanel"
+          aria-labelledby="pills-chat-tab"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <div class="card">
+              <div class="card-header">Assistente Virtual</div>
+              <div class="card-body" style="height: 300px; overflow-y: auto">
+                <div class="text-muted">Nenhuma mensagem ainda.</div>
+              </div>
+              <div class="card-footer">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Digite sua mensagem..."
+                  />
+                  <button class="btn btn-lg btn-primary" type="button">
+                    <i class="bi bi-send"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA DADOS PESSOAIS -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-dados"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-dados"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-3">
+              <i class="ti ti-id"></i> Dados Pessoais
+            </h4>
+
+            <form id="formDadosPessoais">
+              <!-- Nome -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  class="form-control"
+                  placeholder="Nome"
+                  required
+                />
+                <label for="nome"><i class="ti ti-user"></i> Nome</label>
+              </div>
+
+              <div class="row">
+                <!-- CPF -->
+                <div class="col-md-6 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="cpf"
+                      name="cpf"
+                      class="form-control"
+                      placeholder="CPF"
+                      required
+                    />
+                    <label for="cpf">
+                      <i class="ti ti-credit-card"></i> CPF
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Data de Nascimento -->
+                <div class="col-md-6 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="date"
+                      id="dataNascimento"
+                      name="dataNascimento"
+                      class="form-control"
+                      placeholder="Data de Nascimento"
+                      required
+                    />
+                    <label for="dataNascimento">
+                      <i class="ti ti-calendar"></i> Data de Nascimento
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- E-mail -->
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="E-mail"
+                  required
+                />
+                <label for="email"><i class="ti ti-mail"></i> E-mail</label>
+              </div>
+
+              <div class="row">
+                <!-- Celular -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="celular"
+                      name="celular"
+                      class="form-control"
+                      placeholder="Celular"
+                    />
+                    <label for="celular">
+                      <i class="ti ti-phone"></i> Celular
+                    </label>
+                  </div>
+                </div>
+
+                <!-- WhatsApp -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="whatsapp"
+                      name="whatsapp"
+                      class="form-control"
+                      placeholder="WhatsApp"
+                    />
+                    <label for="whatsapp">
+                      <i class="ti ti-brand-whatsapp"></i> WhatsApp
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Outro Telefone -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="outroTelefone"
+                      name="outroTelefone"
+                      class="form-control"
+                      placeholder="Outro Telefone"
+                    />
+                    <label for="outroTelefone">
+                      <i class="ti ti-phone-call"></i> Outro Telefone
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Aceita receber SMS -->
+              <div class="form-check form-switch mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="aceitaSMS"
+                  name="aceitaSMS"
+                />
+                <label class="form-check-label" for="aceitaSMS">
+                  <i class="ti ti-message"></i> Aceita receber SMS?
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ABA ENDEREÇO -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-endereco"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-endereco"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-3"><i class="ti ti-map-pin"></i> Endereço</h4>
+
+            <form id="formEndereco">
+              <!-- Endereço -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  id="endereco"
+                  name="endereco"
+                  class="form-control"
+                  placeholder="Endereço"
+                  required
+                />
+                <label for="endereco">
+                  <i class="ti ti-road"></i> Endereço
+                </label>
+              </div>
+
+              <div class="row">
+                <!-- Número -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="numero"
+                      name="numero"
+                      class="form-control"
+                      placeholder="Número"
+                      required
+                    />
+                    <label for="numero">
+                      <i class="ti ti-hash"></i> Número
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Complemento -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="complemento"
+                      name="complemento"
+                      class="form-control"
+                      placeholder="Complemento"
+                    />
+                    <label for="complemento">
+                      <i class="ti ti-building"></i> Complemento
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Bairro -->
+                <div class="col-md-4 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="bairro"
+                      name="bairro"
+                      class="form-control"
+                      placeholder="Bairro"
+                      required
+                    />
+                    <label for="bairro">
+                      <i class="ti ti-home"></i> Bairro
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Cidade -->
+                <div class="col-md-6 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="cidade"
+                      name="cidade"
+                      class="form-control"
+                      placeholder="Cidade"
+                      required
+                    />
+                    <label for="cidade">
+                      <i class="ti ti-building"></i> Cidade
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-md-3 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="estado"
+                      name="estado"
+                      class="form-control"
+                      placeholder="Estado"
+                      required
+                    />
+                    <label for="estado"><i class="ti ti-map"></i> Estado</label>
+                  </div>
+                </div>
+
+                <!-- CEP -->
+                <div class="col-md-3 mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      id="cep"
+                      name="cep"
+                      class="form-control"
+                      placeholder="CEP"
+                      required
+                    />
+                    <label for="cep"><i class="ti ti-mailbox"></i> CEP</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ABA MAILING -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-mailing"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-mailing"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-3">
+              <i class="ti ti-mail"></i> Dados do Mailing
+            </h4>
+
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td class="fw-bold table-secondary" style="width: 30%">
+                      Origem
+                    </td>
+                    <td>Campanha X</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-bold table-secondary">Tipo</td>
+                    <td>Prospecção Ativa</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-bold table-secondary">Data de Importação</td>
+                    <td>21/03/2025</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-bold table-secondary">Responsável</td>
+                    <td>Carlos Mendes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA PRODUTOS -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-produtos"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-produtos"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-4"><i class="ti ti-package"></i> Produtos</h4>
+
+            <!-- Seletor de produto com botão -->
+            <div class="row align-items-end mb-4">
+              <div class="col-md-8">
+                <label for="produtoSelect" class="form-label">
+                  Selecionar Produto
+                </label>
+                <select id="produtoSelect" class="form-select">
+                  <option selected disabled>Escolha um produto</option>
+                  <option value="produto1">Produto 1</option>
+                  <option value="produto2">Produto 2</option>
+                  <option value="produto3">Produto 3</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-success w-100 mt-2">
+                  <i class="ti ti-plus"></i> Adicionar Produto
+                </button>
+              </div>
+            </div>
+
+            <!-- Tabela de produtos adicionados -->
+            <div class="table-responsive mb-4">
+              <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Produto 1</td>
+                    <td>Descrição breve do produto 1</td>
+                    <td>R$ 99,00</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger">
+                        <i class="ti ti-trash"></i> Remover
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Produto 2</td>
+                    <td>Descrição breve do produto 2</td>
+                    <td>R$ 149,90</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger">
+                        <i class="ti ti-trash"></i> Remover
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Opções adicionais -->
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="aceitaSeguro"
+                  />
+                  <label class="form-check-label" for="aceitaSeguro">
+                    <i class="ti ti-shield-check"></i> Aceita Seguro
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="receberInformacoes"
+                  />
+                  <label class="form-check-label" for="receberInformacoes">
+                    <i class="ti ti-mail"></i> Aceita receber informações
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="pagamentoFacilitado"
+                  />
+                  <label class="form-check-label" for="pagamentoFacilitado">
+                    <i class="ti ti-credit-card"></i> Pagamento Facilitado
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA ADICIONAIS -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-adicionais"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-adicionais"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-4"><i class="ti ti-users"></i> Adicionais</h4>
+
+            <!-- Formulário para adicionar adicional -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nomeAdicional"
+                    placeholder="Nome"
+                    required
+                  />
+                  <label for="nomeAdicional">
+                    <i class="ti ti-user"></i> Nome
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="nascimentoAdicional"
+                    placeholder="Data de Nascimento"
+                    required
+                  />
+                  <label for="nascimentoAdicional">
+                    <i class="ti ti-calendar"></i> Data de Nascimento
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="cpfAdicional"
+                    placeholder="CPF"
+                    required
+                  />
+                  <label for="cpfAdicional">
+                    <i class="ti ti-credit-card"></i> CPF
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <button class="btn btn-success">
+                <i class="ti ti-plus"></i> Adicionar Adicional
+              </button>
+            </div>
+
+            <!-- Lista de adicionais -->
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nome</th>
+                    <th>Data de Nascimento</th>
+                    <th>CPF</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Maria Clara</td>
+                    <td>10/05/2010</td>
+                    <td>123.456.789-00</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger">
+                        <i class="ti ti-trash"></i> Remover
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA COBRANÇA -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-cobranca"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-cobranca"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-4">
+              <i class="ti ti-credit-card"></i> Dados de Cobrança
+            </h4>
+
+            <div class="row g-4">
+              <!-- Formulário de pagamento -->
+              <div class="col-md-7">
+                <form id="formCobranca">
+                  <!-- Nome no Cartão -->
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      id="nomeCartao"
+                      name="nomeCartao"
+                      class="form-control"
+                      placeholder="Nome no Cartão"
+                      required
+                    />
+                    <label for="nomeCartao">
+                      <i class="ti ti-user"></i> Nome no Cartão
+                    </label>
+                  </div>
+
+                  <!-- Número do Cartão com indicador visual -->
+                  <div class="form-floating mb-3 position-relative">
+                    <input
+                      type="text"
+                      id="numeroCartao"
+                      name="numeroCartao"
+                      class="form-control"
+                      placeholder="0000 0000 0000 0000"
+                      maxlength="19"
+                      required
+                    />
+                    <label for="numeroCartao">
+                      <i class="ti ti-credit-card"></i> Número do Cartão
+                    </label>
+                  </div>
+
+                  <div class="row">
+                    <!-- Validade -->
+                    <div class="col-md-6 mb-3">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          id="validadeCartao"
+                          name="validadeCartao"
+                          class="form-control"
+                          placeholder="MM/AA"
+                          maxlength="5"
+                          required
+                        />
+                        <label for="validadeCartao">
+                          <i class="ti ti-calendar"></i> Validade (MM/AA)
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- CVV -->
+                    <div class="col-md-6 mb-3">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          id="cvvCartao"
+                          name="cvvCartao"
+                          class="form-control"
+                          placeholder="000"
+                          maxlength="4"
+                          required
+                        />
+                        <label for="cvvCartao">
+                          <i class="ti ti-lock"></i> Código de Segurança (CVV)
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Parcelamento -->
+                  <div class="form-floating mb-4">
+                    <select
+                      id="parcelas"
+                      name="parcelas"
+                      class="form-select"
+                      required
+                    >
+                      <option selected disabled>Selecione</option>
+                      <option value="1">1x sem juros</option>
+                      <option value="2">2x sem juros</option>
+                      <option value="3">3x sem juros</option>
+                      <option value="4">4x com juros</option>
+                      <option value="5">5x com juros</option>
+                      <option value="6">6x com juros</option>
+                      <option value="7">7x com juros</option>
+                      <option value="8">8x com juros</option>
+                      <option value="9">9x com juros</option>
+                      <option value="10">10x com juros</option>
+                      <option value="11">11x com juros</option>
+                      <option value="12">12x com juros</option>
+                    </select>
+                    <label for="parcelas">
+                      <i class="ti ti-layout-grid"></i> Parcelamento
+                    </label>
+                  </div>
+
+                  <!-- Botão -->
+                  <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="ti ti-device-floppy"></i> Finalizar Pagamento
+                  </button>
+                </form>
+              </div>
+              <!-- Imagem do cartão -->
+              <div
+                class="col-md-5 d-flex align-items-center justify-content-center"
+              >
+                <img
+                  src="https://img.icons8.com/color/344/bank-card-back-side.png"
+                  alt="Cartão de Crédito"
+                  class="img-fluid"
+                  style="max-width: 300px"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA SCRIPT -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-script"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-script"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-3">
+              <i class="ti ti-script"></i> Script de Abordagem
+            </h4>
+            <p class="lead">
+              "Olá, tudo bem? Me chamo <strong>[Seu Nome]</strong> e estou
+              entrando em contato com você porque identificamos uma oportunidade
+              incrível que pode ajudar a
+              <strong
+                >economizar tempo, reduzir custos e aumentar a
+                produtividade</strong
+              >
+              da sua equipe. Nós trabalhamos com soluções que já ajudaram
+              centenas de empresas como a sua a transformar os resultados. Você
+              tem 2 minutinhos para que eu te explique rapidamente como
+              funciona?"
+            </p>
+          </div>
+        </div>
+
+        <!-- ABA RESUMO -->
+        <div
+          class="tab-pane fade"
+          id="pills-ficha-resumo"
+          role="tabpanel"
+          aria-labelledby="pills-ficha-resumo"
+          tabindex="0"
+        >
+          <div class="container mt-5">
+            <h4 class="fw-bold mb-4">
+              <i class="ti ti-checkup-list"></i> Resumo do Atendimento
+            </h4>
+
+            <div class="border rounded p-4 bg-light">
+              <p>
+                Perfeito, <strong>João da Silva</strong>, antes de finalizarmos,
+                vou recapitular as informações:
+              </p>
+
+              <p>
+                Seu cartão de crédito <strong>Casas Bahia</strong> na bandeira
+                <strong>Visa</strong>, modalidade <strong>Platinum</strong>,
+                está pré-aprovado e chegará em até
+                <strong>15 dias úteis</strong> no endereço informado.
+              </p>
+
+              <p>
+                Me confirme os dois últimos dígitos do seu CPF:
+                <strong>00</strong>.
+              </p>
+
+              <p>
+                Seu endereço permanece na Rua <strong>das Flores</strong>,
+                Bairro <strong>Centro</strong>, Nº <strong>123</strong>, Cidade
+                <strong>São Paulo</strong>, Estado <strong>SP</strong>,
+                Complemento <strong>Ap 101</strong>.
+              </p>
+
+              <p>
+                Seu estado civil: <strong>Solteiro</strong>. Nome da Mãe:
+                <strong>Maria da Silva</strong>. Data de Nascimento:
+                <strong>09/01/1982</strong>. E-mail para envio das faturas:
+                <strong>joao@email.com</strong>. Vencimento da fatura:
+                <strong>Todo dia 10</strong>.
+              </p>
+
+              <p>
+                Profissão: <strong>Analista de Sistemas</strong>. Renda:
+                <strong>R$ 5.000,00</strong>.
+              </p>
+
+              <p>
+                Com anuidade gratuita mediante a primeira compra, de qualquer
+                valor assim que o cartão chegar, garantindo assim a isenção
+                vitalícia do seu cartão e dos cartões adicionais.
+              </p>
+
+              <p>
+                O cartão adicional segue no nome de
+                <strong>Maria Clara</strong>.
+              </p>
+
+              <p>
+                O seguro segue no valor de <strong>R$ 5,99</strong> mensais,
+                somente para o titular do cartão do
+                <strong>João da Silva</strong>, com cobrança independente do
+                desbloqueio do cartão.
+              </p>
+
+              <p>
+                A confirmação será enviada pelo seu WhatsApp para formalização.
+              </p>
+
+              <p>
+                Gostaria de confirmar se o(a) senhor(a) aceita o envio do cartão
+                e todos os detalhes apresentados:
+                <strong>[SIM, ACEITO/CONFIRMO]</strong>?
+              </p>
+
+              <p>
+                Será necessário que tenha um maior de 18 anos no local para
+                recebimento do cartão.
+              </p>
+
+              <p>
+                Lembro que, para desbloquear o cartão, basta entrar em contato
+                com a Central <strong>4003-4033</strong> ou utilizar o App
+                <strong>BRADESCARD</strong>. Assim, o(a) senhor(a) já poderá
+                aproveitar todos os benefícios do cartão!
+                <br />
+                <em
+                  >Destaque: Você pode parcelar suas compras em até 24x fixas,
+                  em produtos selecionados.</em
+                >
+              </p>
+
+              <p>Ficou alguma dúvida, <strong>João da Silva</strong>?</p>
+
+              <p>
+                Ótimo! Agradeço pela sua confiança e pelo tempo dedicado. Em
+                breve, o cartão chegará ao seu endereço, e, se precisar de
+                qualquer coisa, estamos à disposição. Tenha um excelente dia e
+                aproveite os benefícios do seu novo
+                <strong>cartão Casas Bahia</strong>!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Fixo -->
+    <div class="footer-fixed">
+      <!-- Lado esquerdo - Automação -->
+      <div class="footer-left">
+        <div class="dropdown">
+          <button
+            class="footer-btn dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Ferramentas de automação"
+          >
+            <i class="bi bi-lightning-fill"></i>
+            <span class="btn-text">Automação</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-robot"></i> Script Automático
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-magic"></i> Preenchimento Inteligente
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-gear"></i> Configurações
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Centro - Navegação entre abas -->
+      <div class="footer-center">
+        <button
+          class="footer-btn footer-btn-outline nav-btn"
+          id="btnAnteriorFooter"
+          title="Aba anterior (Ctrl + ←)"
+        >
+          <i class="ti ti-arrow-left"></i>
+          <span class="btn-text">Anterior</span>
+          <span class="footer-shortcut">←</span>
+        </button>
+
+        <div class="mx-2 text-muted small d-none d-md-block">
+          <i class="bi bi-layers"></i>
+          <span id="abaAtual">1</span>/<span id="totalAbas">9</span>
+        </div>
+
+        <button
+          class="footer-btn footer-btn-primary nav-btn"
+          id="btnProximoFooter"
+          title="Próxima aba (Ctrl + →)"
+        >
+          <span class="btn-text">Próximo</span>
+          <i class="ti ti-arrow-right"></i>
+          <span class="footer-shortcut">→</span>
+        </button>
+      </div>
+
+      <!-- Lado direito - Ações principais -->
+      <div class="footer-right">
+        <!-- Agendar -->
+        <button
+          class="footer-btn footer-btn-success"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasAgendamento"
+          title="Agendar atendimento (Ctrl + G)"
+        >
+          <i class="ti ti-calendar-plus"></i>
+          <span class="btn-text">Agendar</span>
+          <span class="footer-shortcut">G</span>
+        </button>
+
+        <!-- Registrar Atendimento -->
+        <button
+          class="footer-btn footer-btn-danger"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasRecusar"
+          title="Registrar atendimento (Ctrl + F)"
+        >
+          <i class="ti ti-file-text"></i>
+          <span class="btn-text">Recusar</span>
+          <span class="footer-shortcut">F</span>
+        </button>
+
+        <!-- Sucesso -->
+        <div class="d-none" id="dropdown-sucesso">
+          <button
+            class="footer-btn footer-btn-success"
+            type="button"
+            aria-expanded="false"
+            title="Registrar sucesso - BLOQUEADO (Complete a abordagem primeiro)"
+            disabled
+          >
+            <i class="ti ti-check-circle"></i>
+            <span class="btn-text">Sucesso</span>
+            <span class="footer-shortcut">S</span>
+          </button>
+          <!-- <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="ti ti-check"></i> Venda Fechada
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="ti ti-clock"></i> Pendente Confirmação
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="ti ti-calendar-event"></i> Reagendamento
+              </a>
+            </li>
+          </ul> -->
+        </div>
+
+        <!-- Fechar -->
+        <!-- <div class="dropdown">
+          <button
+            class="footer-btn dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Opções de fechamento"
+          >
+            <i class="ti ti-x"></i>
+            <span class="btn-text">Fechar</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="ti ti-device-floppy"></i> Salvar e Fechar
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item text-warning" href="#">
+                <i class="ti ti-x"></i> Fechar sem Salvar
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="atendimento.html">
+                <i class="ti ti-arrow-left"></i> Voltar ao Atendimento
+              </a>
+            </li>
+          </ul>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Offcanvas Agendamento -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="offcanvasAgendamento"
+      aria-labelledby="offcanvasAgendamentoLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" id="offcanvasAgendamentoLabel">
+          <i class="ti ti-calendar-event"></i> Agendamento
+        </h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="position-relative" style="padding-bottom: 80px">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <form id="formAgendamento">
+                <div class="form-floating mb-3">
+                  <select
+                    class="form-select"
+                    id="tipoAgendamento"
+                    name="tipoAgendamento"
+                    required
+                  >
+                    <option value="" selected disabled>Selecione o tipo</option>
+                    <option value="particular">Particular</option>
+                    <option value="ligacaoCaiu">Ligação Caiu</option>
+                    <option value="naoEstaEmCasa">Não Está em Casa</option>
+                    <option value="recado">Recado</option>
+                    <option value="caixaPostal">Caixa Postal</option>
+                  </select>
+                  <label for="tipoAgendamento">
+                    <i class="ti ti-user-shield"></i> Tipo de Agendamento
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="agendamentoData"
+                    name="agendamentoData"
+                    placeholder="Data"
+                    required
+                  />
+                  <label for="agendamentoData">
+                    <i class="ti ti-calendar"></i> Data
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="time"
+                    class="form-control"
+                    id="agendamentoHora"
+                    name="agendamentoHora"
+                    placeholder="Hora"
+                    required
+                  />
+                  <label for="agendamentoHora">
+                    <i class="ti ti-clock"></i> Hora
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <textarea
+                    class="form-control"
+                    id="agendamentoObservacao"
+                    name="agendamentoObservacao"
+                    placeholder="Observação"
+                    style="height: 100px"
+                  ></textarea>
+                  <label for="agendamentoObservacao">
+                    <i class="ti ti-pencil"></i> Observação
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- Rodapé fixo -->
+          <div
+            class="offcanvas-footer position-absolute bottom-0 start-0 w-100 p-3"
+          >
+            <button
+              class="btn btn-lg btn-primary w-100"
+              onclick="enviarDados('agenda')"
+            >
+              <i class="ti ti-calendar-check"></i> Realizar Agendamento
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offcanvas Recusar -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="offcanvasRecusar"
+      aria-labelledby="offcanvasRecusarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" id="offcanvasRecusarLabel">
+          <i class="ti ti-ban"></i> Registrar Atendimento
+        </h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="position-relative" style="padding-bottom: 80px">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <form id="formRecusa">
+                <!-- Motivo do Contato -->
+                <div class="form-floating mb-3">
+                  <select
+                    class="form-select"
+                    id="motivoContato"
+                    name="motivoContato"
+                    required
+                  >
+                    <option selected disabled>Selecione um motivo</option>
+                    <option value="desinteresse">Desinteresse</option>
+                    <option value="numeroErrado">Número Errado</option>
+                    <option value="semTempo">Sem Tempo</option>
+                    <option value="jaTemProduto">Já tem o Produto</option>
+                    <option value="naoAtende">Não Atende</option>
+                  </select>
+                  <label for="motivoContato">
+                    <i class="ti ti-help-circle"></i> Motivo do Contato *
+                  </label>
+                </div>
+
+                <!-- Tabulação -->
+                <div class="form-floating mb-3">
+                  <select
+                    class="form-select"
+                    id="tabulacaoContato"
+                    name="tabulacaoContato"
+                    required
+                  >
+                    <option selected disabled>Selecione uma tabulação</option>
+                    <option value="naoQuer">Não Quer</option>
+                    <option value="vaiPensar">Vai Pensar</option>
+                    <option value="retornar">Pedir Retorno</option>
+                    <option value="numeroInvalido">Número Inválido</option>
+                    <option value="clienteIrritado">Cliente Irritado</option>
+                  </select>
+                  <label for="tabulacaoContato">
+                    <i class="ti ti-chart-pie"></i> Tabulação *
+                  </label>
+                </div>
+
+                <!-- Observação -->
+                <div class="form-floating mb-3">
+                  <textarea
+                    class="form-control"
+                    id="recusaObservacao"
+                    name="recusaObservacao"
+                    placeholder="Observação"
+                    style="height: 100px"
+                  ></textarea>
+                  <label for="recusaObservacao">
+                    <i class="ti ti-pencil"></i> Observação
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Rodapé fixo -->
+          <div
+            class="offcanvas-footer position-absolute bottom-0 start-0 w-100 p-3"
+          >
+            <button
+              class="btn btn-lg btn-danger w-100"
+              onclick="enviarDados('recusa')"
+            >
+              <i class="ti ti-ban"></i> Registrar Atendimento
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <script src="ficha.js"></script>
+  </body>
+</html>

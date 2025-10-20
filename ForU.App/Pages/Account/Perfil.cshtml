@@ -1,0 +1,83 @@
+@page
+@model DefyIt.ForU.App.Pages.Account.PerfilModel
+@{
+    ViewData["Title"] = "Perfil do Usuário";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="ti ti-user-circle me-2"></i>
+                        Perfil do Usuário
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">Nome:</label>
+                                <p class="form-control-plaintext bg-light rounded px-3 py-2">
+                                    @(User.Identity?.Name ?? "N/A")
+                                </p>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">Matrícula:</label>
+                                <p class="form-control-plaintext bg-light rounded px-3 py-2">
+                                    @(User.Claims?.FirstOrDefault(c => c.Type == "Matricula")?.Value ?? "N/A")
+                                </p>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">Operação:</label>
+                                <p class="form-control-plaintext bg-light rounded px-3 py-2">
+                                    @(User.Claims?.FirstOrDefault(c => c.Type == "Operacao")?.Value ?? "N/A")
+                                </p>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">Perfil:</label>
+                                <p class="form-control-plaintext bg-light rounded px-3 py-2">
+                                    <span class="badge bg-info text-dark">
+                                        @(User.Claims?.FirstOrDefault(c => c.Type == "Perfil")?.Value ?? "N/A")
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="/" class="btn btn-outline-primary">
+                                <i class="ti ti-arrow-left me-1"></i>
+                                Voltar ao Início
+                            </a>
+                            
+                            <a href="/Account/Logout" class="btn btn-outline-danger">
+                                <i class="ti ti-logout me-1"></i>
+                                Sair
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <div class="alert alert-warning">
+                                <i class="ti ti-exclamation-triangle me-2"></i>
+                                Você não está logado.
+                            </div>
+                            <a href="/Account/Login" class="btn btn-primary">
+                                <i class="ti ti-login me-1"></i>
+                                Fazer Login
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

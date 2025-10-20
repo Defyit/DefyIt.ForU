@@ -1,0 +1,741 @@
+/**
+ * Sistema de Atendimento - Ficha do Cliente
+ * Estilos CSS Organizados
+ * Versão: 2.0
+ * Data: Janeiro 2025
+ */
+
+/* ===== VARIÁVEIS CSS CUSTOMIZADAS ===== */
+:root {
+  --navbar-height: 80px;
+  --tabs-height: 70px;
+  --footer-height: 80px;
+  --transition-default: all 0.3s ease;
+  --border-radius-default: 8px;
+  --shadow-default: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+}
+
+/* ===== RESET E BASE ===== */
+body,
+html {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+
+/* Navbar Principal */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+  height: var(--navbar-height);
+  padding: 15px var(--spacing-xl);
+  background-color: var(--bs-body-bg) !important;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Navbar de Tabs */
+.tabs-navbar {
+  background: var(--bs-body-bg);
+  z-index: 1040;
+  border-bottom: 1px solid var(--bs-border-color);
+  padding: 0;
+  min-height: var(--tabs-height);
+  display: flex;
+  align-items: stretch;
+}
+
+.tabs-navbar .nav {
+  height: 100%;
+  align-items: stretch;
+}
+
+.tabs-navbar .nav-item {
+  display: flex;
+  align-items: stretch;
+}
+
+.tabs-navbar .nav-link {
+  color: var(--bs-body-color);
+  font-weight: 500;
+  padding: 0 var(--spacing-lg);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: var(--tabs-height);
+  min-height: var(--tabs-height);
+  gap: var(--spacing-sm);
+  transition: var(--transition-default);
+}
+
+.tabs-navbar .nav-link.active {
+  font-weight: bold;
+  color: var(--bs-emphasis-color);
+  border-bottom: 3px solid var(--bs-primary);
+}
+
+.tabs-navbar .nav-link.disabled {
+  padding: 0 var(--spacing-lg);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: var(--tabs-height);
+  min-height: var(--tabs-height);
+  gap: var(--spacing-sm);
+}
+
+/* Container de Conteúdo */
+.content-container {
+  padding: var(--spacing-xl);
+  margin-bottom: 50px;
+  height: calc(100vh - var(--navbar-height) - var(--tabs-height));
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+.container-fluid.content-container {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+/* ===== COMPONENTES DE UI ===== */
+
+/* Campos de Formulário */
+.form-control[readonly] {
+  background-color: var(--bs-secondary-bg);
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.form-control.is-valid {
+  border-color: #198754;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath fill='%23198754' d='m2.3 6.73.94-.94 1.06 1.06-1.5 1.5L.5 6.05l.94-.94z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Espaçamento de Ícones */
+.form-floating label i,
+.form-label i,
+.form-check-label i,
+.offcanvas-title i {
+  margin-right: var(--spacing-sm);
+}
+
+.btn i {
+  margin-right: 6px;
+}
+
+h4 i,
+h5 i {
+  margin-right: 10px;
+}
+
+.dropdown-item i {
+  margin-right: var(--spacing-sm);
+  width: 16px;
+}
+
+.navbar .bi-person-circle {
+  margin-right: var(--spacing-sm);
+}
+
+/* ===== FOOTER FIXO ===== */
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(
+    to top,
+    var(--bs-secondary-bg),
+    var(--bs-body-bg)
+  );
+  border-top: 1px solid var(--bs-border-color);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1060;
+  min-height: var(--footer-height);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 0 0 auto;
+}
+
+.footer-center {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  justify-content: center;
+  max-width: 400px;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+}
+
+/* ===== BOTÕES DO FOOTER ===== */
+.footer-btn {
+  background: var(--bs-secondary);
+  color: var(--bs-white);
+  border: none;
+  padding: 10px var(--spacing-lg);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: var(--transition-default);
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.footer-btn:hover {
+  background: var(--bs-secondary-hover, #5a6268);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-default);
+}
+
+.footer-btn:active {
+  transform: translateY(0);
+}
+
+/* Variações de Cores dos Botões */
+.footer-btn-primary {
+  background: var(--bs-primary);
+  color: white;
+}
+
+.footer-btn-primary:hover {
+  background: var(--bs-primary-hover, #0b5ed7);
+}
+
+.footer-btn-success {
+  background: var(--bs-success);
+  color: white;
+}
+
+.footer-btn-success:hover {
+  background: var(--bs-success-hover, #157347);
+}
+
+.footer-btn-success:disabled {
+  background-color: var(--bs-secondary) !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer-btn-success.sucesso-habilitado {
+  background-color: var(--bs-success) !important;
+  animation: pulseSuccess 2s infinite;
+}
+
+.footer-btn-danger {
+  background: var(--bs-danger);
+  color: white;
+}
+
+.footer-btn-danger:hover {
+  background: var(--bs-danger-hover, #bb2d3b);
+}
+
+.footer-btn-outline {
+  background: transparent;
+  color: var(--bs-body-color);
+  border: 2px solid var(--bs-border-color);
+}
+
+.footer-btn-outline:hover {
+  background: var(--bs-primary);
+  color: white;
+  border-color: var(--bs-primary);
+}
+
+/* Botões de Navegação */
+.nav-btn {
+  min-width: 100px;
+  justify-content: center;
+}
+
+.dropdown-toggle::after {
+  margin-left: var(--spacing-sm);
+}
+
+/* Badge para Atalhos */
+.footer-shortcut {
+  background: var(--bs-dark);
+  color: var(--bs-light);
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* ===== BOTÕES DE ÍCONES ===== */
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--bs-secondary-color);
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-default);
+  transition: var(--transition-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: var(--bs-secondary-bg);
+  color: var(--bs-primary);
+  transform: scale(1.05);
+}
+
+.icon-btn.active {
+  background-color: var(--bs-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+/* ===== BADGES E STATUS ===== */
+.status-badge {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px var(--spacing-sm);
+  border-radius: 15px;
+  text-transform: uppercase;
+}
+
+.status-logado {
+  background-color: var(--bs-success);
+  color: white;
+}
+
+.status-falando {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+.status-pausa {
+  background-color: var(--bs-warning);
+  color: var(--bs-dark);
+}
+
+.time-badge {
+  background-color: var(--bs-secondary);
+  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 4px var(--spacing-sm);
+  border-radius: 4px;
+}
+
+.dialer-badge {
+  background-color: var(--bs-info);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px var(--spacing-sm);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* ===== BANDEIRA DO CARTÃO ===== */
+#bandeiraCartao {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: var(--transition-default);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* ===== TEMA ESCURO - BOTÃO TOGGLE ===== */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle .theme-icon {
+  transition: transform 0.3s ease;
+}
+
+[data-bs-theme="dark"] .theme-toggle .sun-icon {
+  transform: rotate(180deg) scale(0.8);
+}
+
+[data-bs-theme="light"] .theme-toggle .moon-icon {
+  transform: rotate(-180deg) scale(0.8);
+}
+
+/* ===== OFFCANVAS ===== */
+.offcanvas {
+  z-index: 1100 !important;
+}
+
+.offcanvas-footer {
+  border-top: 1px solid var(--bs-border-color);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes pulseSuccess {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== SWEETALERT2 CUSTOMIZADO ===== */
+.swal-popup-custom {
+  border-radius: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.swal-title-custom {
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+}
+
+.swal-content-custom {
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+
+.swal-button-custom {
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 0.95rem !important;
+}
+
+/* ===== TEMA ESCURO ===== */
+[data-bs-theme="dark"] {
+  /* Formulários */
+  .form-control[readonly] {
+    background-color: var(--bs-dark);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+  }
+
+  /* Alerts */
+  .alert-info {
+    background-color: var(--bs-dark);
+    border-color: var(--bs-info);
+    color: var(--bs-info);
+  }
+
+  /* Tabelas */
+  .table {
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+  }
+
+  .table-bordered > :not(caption) > * > * {
+    border-color: var(--bs-border-color);
+  }
+
+  .table-secondary {
+    background-color: var(--bs-secondary-bg) !important;
+    color: var(--bs-body-color) !important;
+    border-color: var(--bs-border-color) !important;
+  }
+
+  .table td {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+  }
+
+  /* Spinner */
+  .spinner-border {
+    color: var(--bs-primary) !important;
+  }
+
+  /* Background light fix */
+  .bg-light {
+    background-color: var(--bs-dark) !important;
+    border-color: var(--bs-border-color) !important;
+  }
+
+  /* SweetAlert2 */
+  .swal2-popup {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-body-color) !important;
+    border: 1px solid var(--bs-border-color) !important;
+  }
+
+  .swal2-title {
+    color: var(--bs-body-color) !important;
+  }
+
+  .swal2-content {
+    color: var(--bs-secondary-color) !important;
+  }
+
+  .swal2-close {
+    color: var(--bs-body-color) !important;
+  }
+
+  .swal2-loader {
+    border-color: var(--bs-primary) transparent var(--bs-primary) transparent !important;
+  }
+
+  /* Offcanvas no tema escuro */
+  .offcanvas {
+    background-color: var(--bs-dark) !important;
+    border-color: var(--bs-border-color);
+  }
+
+  .offcanvas-header {
+    background-color: var(--bs-dark) !important;
+    border-bottom: 1px solid var(--bs-border-color);
+    color: var(--bs-body-color);
+  }
+
+  .offcanvas-title {
+    color: var(--bs-body-color) !important;
+  }
+
+  .offcanvas-body {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-body-color);
+  }
+
+  .offcanvas .card {
+    background-color: var(--bs-body-bg) !important;
+    border-color: var(--bs-border-color) !important;
+    color: var(--bs-body-color);
+  }
+
+  .offcanvas .card-body {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color);
+  }
+
+  .offcanvas .form-floating > label {
+    color: rgba(var(--bs-body-color-rgb), 0.65) !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 2 !important;
+    height: 100% !important;
+    padding: 1rem 0.75rem !important;
+    overflow: hidden !important;
+    text-align: start !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    pointer-events: none !important;
+    border: var(--bs-border-width) solid transparent !important;
+    transform-origin: 0 0 !important;
+    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out !important;
+    background: none !important;
+  }
+
+  /* ✅ PLACEHOLDER sempre transparente no tema escuro */
+  .offcanvas .form-floating .form-control::placeholder {
+    color: transparent !important; /* ✅ CORRIGIDO: Era var(--bs-secondary-color) */
+  }
+
+  .offcanvas .form-floating .form-control:focus::placeholder {
+    color: transparent !important; /* ✅ CORRIGIDO: Também deve ser transparente */
+  }
+
+  .offcanvas .form-floating textarea.form-control::placeholder {
+    color: transparent !important;
+  }
+
+  .offcanvas .form-floating textarea.form-control:focus::placeholder {
+    color: transparent !important;
+  }
+
+  /* ✅ ESTADOS dos labels no offcanvas */
+  .offcanvas .form-control:focus + label,
+  .offcanvas .form-control:not(:placeholder-shown) + label,
+  .offcanvas .form-select:focus + label,
+  .offcanvas .form-select:not([value=""]) + label {
+    color: var(--bs-primary) !important;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem) !important;
+  }
+
+  /* ✅ TEXTAREA específico no offcanvas */
+  .offcanvas .form-floating > textarea.form-control {
+    background-color: var(--bs-body-bg) !important;
+    border-color: var(--bs-border-color) !important;
+    color: var(--bs-body-color) !important;
+    min-height: calc(3.5rem + calc(var(--bs-border-width) * 2)) !important;
+  }
+
+  .offcanvas .form-floating > textarea.form-control:focus,
+  .offcanvas .form-floating > textarea.form-control:not(:placeholder-shown) {
+    padding-top: 1.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
+
+  /* ✅ ÍCONES nos labels - tema escuro */
+  .offcanvas .form-floating label i {
+    color: rgba(var(--bs-body-color-rgb), 0.65) !important;
+    margin-right: var(--spacing-sm);
+  }
+
+  .offcanvas .form-control:focus + label i,
+  .offcanvas .form-control:not(:placeholder-shown) + label i,
+  .offcanvas .form-select:focus + label i,
+  .offcanvas .form-select:not([value=""]) + label i {
+    color: var(--bs-primary) !important;
+  }
+
+  /* ✅ REMOVER regras antigas conflitantes */
+  .offcanvas .form-control::placeholder {
+    /* ✅ REMOVIDO: estava causando conflito */
+  }
+
+  /* ===== NAVEGAÇÃO POR TAB MELHORADA ===== */
+
+  /* ✅ REMOVER outline padrão de elementos não interativos */
+  form:focus,
+  .card:focus,
+  .card-body:focus,
+  .card-header:focus,
+  .row:focus,
+  .col:focus,
+  .container:focus,
+  .offcanvas-header:focus,
+  .tab-pane:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ✅ MELHORAR indicação visual de foco em elementos interativos */
+  input:focus,
+  select:focus,
+  textarea:focus,
+  button:focus,
+  .nav-link:focus {
+    outline: 2px solid var(--bs-primary) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+  }
+
+  /* ✅ FOCO em tema escuro */
+  [data-bs-theme="dark"] input:focus,
+  [data-bs-theme="dark"] select:focus,
+  [data-bs-theme="dark"] textarea:focus,
+  [data-bs-theme="dark"] button:focus,
+  [data-bs-theme="dark"] .nav-link:focus {
+    outline-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.35) !important;
+  }
+
+  /* ✅ ELEMENTOS desabilitados ou readonly */
+  input[disabled]:focus,
+  input[readonly]:focus,
+  select[disabled]:focus,
+  textarea[disabled]:focus,
+  textarea[readonly]:focus,
+  button[disabled]:focus {
+    outline: 1px dashed var(--bs-secondary) !important;
+    box-shadow: none !important;
+  }
+
+  /* ✅ INDICAÇÃO visual para elementos com tabindex="-1" */
+  [tabindex="-1"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ✅ TRANSIÇÕES suaves para foco */
+  input,
+  select,
+  textarea,
+  button,
+  .nav-link {
+    transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  }
+
+  /* ✅ SKIP LINKS para acessibilidade (opcional) */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--bs-primary);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 4px;
+    transition: top 0.3s ease;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+}
+
+/* ===== REGRAS ESPECÍFICAS PARA OFFCANVAS (AMBOS OS TEMAS) ===== */
+
+/* ✅ OFFCANVAS floating labels - comportamento consistente */
+.offcanvas .form-floating {
+  position: relative;
+}
+
+.offcanvas .form-floating > .form-control::placeholder,
+.offcanvas .form-floating > textarea.form-control::placeholder {
+  color: transparent !important;
+}
+
+.offcanvas .form-floating > .form-control:focus::placeholder,
+.offcanvas .form-floating > textarea.form-control:focus::placeholder {
+  color: transparent !important;
+}
+
+/* ✅ GARANTIR que o label funcione corretamente */
+.offcanvas .form-floating > .form-control:not(:placeholder-shown) ~ label,
+.offcanvas .form-floating > .form-control:focus ~ label,
+.offcanvas
+  .form-floating
+  > textarea.form-control:not(:placeholder-shown)
+  ~ label,
+.offcanvas .form-floating > textarea.form-control:focus ~ label {
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  color: var(--bs-primary);
+}

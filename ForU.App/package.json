@@ -1,0 +1,16 @@
+{
+  "name": "app.foryou",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "sass wwwroot/scss/app.scss wwwroot/css/app.css --style=compressed",
+    "watch:css": "sass --watch wwwroot/scss/app.scss wwwroot/css/app.css --style=expanded"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "sass": "^1.93.2"
+  }
+}

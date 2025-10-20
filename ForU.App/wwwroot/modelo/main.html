@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Navbar Dupla</title>
+
+    <!-- Bootstrap 5.3.8 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Inclua Tabler Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Correção para elementos rounded-circle */
+      .rounded-circle {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* Correção específica para ícones circulares nos cards */
+      .bg-primary.bg-opacity-10.rounded-circle,
+      .bg-success.bg-opacity-10.rounded-circle,
+      .bg-info.bg-opacity-10.rounded-circle,
+      .bg-warning.bg-opacity-10.rounded-circle,
+      .bg-secondary.bg-opacity-10.rounded-circle,
+      .bg-danger.bg-opacity-10.rounded-circle {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        min-height: 60px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* Garantir que os ícones dentro dos círculos mantenham proporção */
+      .rounded-circle i {
+        line-height: 1 !important;
+        width: auto !important;
+        height: auto !important;
+      }
+
+      .content-container {
+        padding: 20px;
+        margin-bottom: 50px; /* Espaço para o footer */
+      }
+      .main-content {
+        padding: 15px;
+      }
+
+      .tabs-navbar {
+        background: var(--bs-body-bg);
+        z-index: 1040;
+        border-bottom: 1px solid var(--bs-border-color);
+        padding: 0; /* Remover padding para que as tabs ocupem toda altura */
+        min-height: 70px; /* Definir altura mínima */
+        display: flex; /* Usar flexbox para controle total */
+        align-items: stretch; /* Esticar itens para ocupar toda altura */
+      }
+
+      .tabs-navbar .nav {
+        height: 100%; /* Ocupar toda altura disponível */
+        align-items: stretch; /* Esticar nav-items */
+      }
+
+      .tabs-navbar .nav-item {
+        display: flex; /* Flexbox nos nav-items */
+        align-items: stretch; /* Esticar para ocupar altura total */
+      }
+
+      .tabs-navbar .nav-link {
+        color: var(--bs-body-color);
+        font-weight: 500;
+        padding: 0 16px; /* Remover padding vertical, manter horizontal */
+        font-size: 16px; /* Aumentar tamanho da fonte */
+        display: flex; /* Flexbox no link */
+        align-items: center; /* Centralizar verticalmente o conteúdo */
+        height: 70px; /* Altura fixa igual ao min-height do container */
+        min-height: 70px; /* Garantir altura mínima */
+        gap: 8px; /* Espaçamento consistente entre ícone e texto */
+      }
+
+      .tabs-navbar .nav-link.active {
+        font-weight: bold;
+        color: var(--bs-emphasis-color);
+        border-bottom: 3px solid var(--bs-primary);
+      }
+
+      .tabs-navbar .nav-link.disabled {
+        padding: 0 16px; /* Manter consistência com outros links */
+        font-size: 16px; /* Tamanho da fonte consistente */
+        display: flex; /* Flexbox no span disabled */
+        align-items: center; /* Centralizar verticalmente */
+        height: 70px; /* Altura fixa */
+        min-height: 70px; /* Garantir altura mínima */
+        gap: 8px; /* Espaçamento consistente entre ícone e texto */
+      }
+
+      /* Espaçamento consistente para ícones em labels de formulários */
+      .form-floating label i,
+      .form-label i,
+      .form-check-label i,
+      .offcanvas-title i {
+        margin-right: 8px; /* Espaçamento consistente */
+      }
+
+      /* Espaçamento para botões com ícones */
+      .btn i {
+        margin-right: 6px; /* Espaçamento menor para botões */
+      }
+
+      /* Ajustar espaçamento em títulos */
+      h4 i,
+      h5 i {
+        margin-right: 10px; /* Espaçamento um pouco maior para títulos */
+      }
+
+      /* Espaçamento para dropdown items */
+      .dropdown-item i {
+        margin-right: 8px;
+        width: 16px; /* Largura fixa para alinhamento */
+      }
+
+      /* Espaçamento para navbar brand e user dropdown */
+      .navbar .bi-person-circle {
+        margin-right: 8px;
+      }
+
+      .footer-fixed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(
+          to top,
+          var(--bs-secondary-bg),
+          var(--bs-body-bg)
+        );
+        border-top: 1px solid var(--bs-border-color);
+        padding: 20px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-btn {
+        background: var(--bs-secondary);
+        color: var(--bs-white);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .footer-btn:hover {
+        background: var(--bs-secondary-hover, #475057);
+      }
+
+      .dropdown-toggle::after {
+        margin-left: 5px;
+      }
+
+      .bold-text {
+        font-weight: bold;
+      }
+
+      /* CSS para fixar navbar e tab bar e rolagem no conteúdo principal */
+      body,
+      html {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1050;
+        height: 80px; /* Aumentar altura da navbar */
+        padding: 15px 20px;
+        background-color: var(--bs-body-bg) !important;
+        border-bottom: 1px solid var(--bs-border-color);
+      }
+
+      .container-fluid.content-container {
+        height: calc(
+          100vh - 150px
+        ); /* Ajustar para acomodar a nova altura das tabs (80px navbar + 70px tabs) */
+        overflow-y: auto;
+        padding-bottom: 70px; /* Para não cortar o conteúdo atrás do footer */
+      }
+      .offcanvas {
+        z-index: 1100 !important;
+      }
+
+      /* Estilos para badges de status */
+      .status-badge {
+        font-size: 12px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 15px;
+        text-transform: uppercase;
+      }
+
+      .status-logado {
+        background-color: var(--bs-success);
+        color: white;
+      }
+
+      .status-falando {
+        background-color: var(--bs-primary);
+        color: white;
+      }
+
+      .status-pausa {
+        background-color: var(--bs-warning);
+        color: var(--bs-dark);
+      }
+
+      .time-badge {
+        background-color: var(--bs-secondary);
+        color: white;
+        font-family: monospace;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+
+      /* Badge do tipo de discador */
+      .dialer-badge {
+        background-color: var(--bs-info);
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+      }
+
+      /* Botões de ícones - ATUALIZADO */
+      .icon-btn {
+        background: none;
+        border: none;
+        color: var(--bs-secondary-color);
+        font-size: 24px; /* Aumentado de 20px para 24px */
+        width: 48px; /* Tamanho fixo para quadrado perfeito */
+        height: 48px; /* Tamanho fixo para quadrado perfeito */
+        border-radius: 8px; /* Bordas ligeiramente arredondadas */
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-btn:hover {
+        background-color: var(--bs-secondary-bg);
+        color: var(--bs-primary);
+        transform: scale(1.05); /* Efeito de zoom no hover */
+      }
+
+      .icon-btn.active {
+        background-color: var(--bs-primary);
+        color: white;
+        box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.3); /* Sombra quando ativo */
+      }
+
+      /* Botão de toggle tema */
+      .theme-toggle {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .theme-toggle .theme-icon {
+        transition: transform 0.3s ease;
+      }
+
+      [data-bs-theme="dark"] .theme-toggle .sun-icon {
+        transform: rotate(180deg) scale(0.8);
+      }
+
+      [data-bs-theme="light"] .theme-toggle .moon-icon {
+        transform: rotate(-180deg) scale(0.8);
+      }
+
+      /* Ajustes específicos para tema escuro */
+      [data-bs-theme="dark"] .spinner-border {
+        color: var(--bs-primary) !important;
+      }
+
+      [data-bs-theme="dark"] .bg-light {
+        background-color: var(--bs-dark) !important;
+        border-color: var(--bs-border-color) !important;
+      }
+
+      /* Adicionar ao CSS existente */
+      .offcanvas-footer {
+        border-top: 1px solid var(--bs-border-color);
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Melhorar responsividade da navbar */
+      @media (max-width: 768px) {
+        .navbar {
+          height: auto;
+          min-height: 80px;
+        }
+
+        .tabs-navbar {
+          min-height: 60px; /* Reduzir altura em telas pequenas */
+        }
+
+        .tabs-navbar .nav-link {
+          height: 60px;
+          min-height: 60px;
+          font-size: 14px;
+        }
+
+        .tabs-navbar .nav-link.disabled {
+          height: 60px;
+          min-height: 60px;
+          font-size: 14px;
+        }
+
+        .container-fluid.content-container {
+          height: calc(100vh - 140px); /* Ajustar para mobile */
+        }
+      }
+
+      /* Ajustar tabs em telas pequenas */
+      @media (max-width: 992px) {
+        .tabs-navbar .nav-link {
+          font-size: 14px;
+        }
+
+        .tabs-navbar .nav-link.disabled {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Principal -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light px-3 d-flex align-items-center"
+    >
+      <a class="navbar-brand" href="#">
+        <img
+          src="https://s3.defyit.com.br/defyit/logo.svg"
+          alt="Logo"
+          height="40"
+        />
+      </a>
+
+      <!-- Botões de ícones à esquerda -->
+      <div class="d-flex align-items-center gap-2 ms-4">
+        <button class="icon-btn active" title="Atendimento">
+          <i class="bi bi-headset"></i>
+        </button>
+        <button class="icon-btn" title="Agenda">
+          <i class="bi bi-calendar3"></i>
+        </button>
+        <button class="icon-btn" title="Relatórios">
+          <i class="bi bi-graph-up"></i>
+        </button>
+      </div>
+
+      <!-- Área direita com botões adicionais, badges e usuário -->
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <!-- Botões adicionais -->
+        <div class="d-flex align-items-center gap-2">
+          <button class="icon-btn" title="Configurações">
+            <i class="bi bi-gear"></i>
+          </button>
+          <button class="icon-btn" title="Notificações">
+            <i class="bi bi-bell"></i>
+          </button>
+          <button class="icon-btn" title="Histórico">
+            <i class="bi bi-clock-history"></i>
+          </button>
+          <button
+            class="icon-btn theme-toggle"
+            title="Alterar Tema"
+            id="themeToggle"
+          >
+            <i class="bi bi-sun-fill theme-icon sun-icon"></i>
+            <i
+              class="bi bi-moon-fill theme-icon moon-icon position-absolute"
+            ></i>
+          </button>
+          <button class="icon-btn" title="Ajuda">
+            <i class="bi bi-question-circle"></i>
+          </button>
+        </div>
+
+        <!-- Badges de status e tempo -->
+        <div class="d-flex flex-column align-items-end gap-1">
+          <div class="d-flex align-items-center gap-2">
+            <span class="dialer-badge" id="dialerBadge">OLOS</span>
+            <span class="status-badge status-logado" id="statusBadge"
+              >Logado</span
+            >
+            <span class="time-badge" id="statusTime">00:05:32</span>
+          </div>
+        </div>
+
+        <!-- Dropdown do usuário -->
+        <div class="dropdown">
+          <a
+            class="d-flex align-items-center text-decoration-none dropdown-toggle"
+            href="#"
+            role="button"
+            id="userDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+            <span class="text-primary fw-semibold">Nome do Usuário</span>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="userDropdown"
+          >
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Configurações</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Tabs Navbar -->
+    <nav class="tabs-navbar">
+      <ul class="nav" id="pills-tab" role="tablist">
+        <!-- ABA OPERAÇÃO (AGORA APENAS LABEL - NÃO CLICÁVEL) -->
+        <li class="nav-item">
+          <span class="nav-link disabled bg-secondary text-white">
+            <i class="bi bi-flag"></i> PICPAY
+          </span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Container principal -->
+    <div class="container-fluid content-container">
+      <div class="tab-content" id="pills-tabContent">
+        <!-- Aba OPERAÇÃO -->
+        <div
+          class="tab-pane fade show active"
+          id="pills-operacao"
+          role="tabpanel"
+          aria-labelledby="pills-operacao-tab"
+          tabindex="0"
+        >
+          <!-- container da pagina -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS 5.3.8 -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // Sistema de Temas
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+
+      // Verificar tema salvo ou usar preferência do sistema
+      const savedTheme = localStorage.getItem("theme");
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+      const currentTheme = savedTheme || systemTheme;
+
+      // Aplicar tema inicial
+      htmlElement.setAttribute("data-bs-theme", currentTheme);
+
+      // Toggle de tema
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-bs-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+        htmlElement.setAttribute("data-bs-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+
+        // Atualizar select no modal
+        document.getElementById("tema").value = newTheme;
+      });
+
+      // Escutar mudanças na preferência do sistema
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            htmlElement.setAttribute(
+              "data-bs-theme",
+              e.matches ? "dark" : "light"
+            );
+          }
+        });
+
+      let segundos = 0;
+      let statusSegundos = 332; // Exemplo: 5min32s no status atual
+      const timerSpan = document.getElementById("tempoAtendimento");
+      const statusTimeSpan = document.getElementById("statusTime");
+
+      setInterval(() => {
+        segundos++;
+        statusSegundos++;
+
+        // Timer principal
+        const hrs = String(Math.floor(segundos / 3600)).padStart(2, "0");
+        const min = String(Math.floor((segundos % 3600) / 60)).padStart(2, "0");
+        const sec = String(segundos % 60).padStart(2, "0");
+        timerSpan.textContent = `${hrs}:${min}:${sec}`;
+
+        // Timer do status
+        const statusHrs = String(Math.floor(statusSegundos / 3600)).padStart(
+          2,
+          "0"
+        );
+        const statusMin = String(
+          Math.floor((statusSegundos % 3600) / 60)
+        ).padStart(2, "0");
+        const statusSec = String(statusSegundos % 60).padStart(2, "0");
+        statusTimeSpan.textContent = `${statusHrs}:${statusMin}:${statusSec}`;
+
+        if (segundos === 10) {
+          window.location.href = "ficha.html";
+        }
+      }, 1000);
+
+      // Simulação de mudança de status
+      function alterarStatus(novoStatus) {
+        const statusBadge = document.getElementById("statusBadge");
+        statusBadge.textContent = novoStatus;
+        statusBadge.className = `status-badge status-${novoStatus.toLowerCase()}`;
+        statusSegundos = 0; // Reset do timer do status
+      }
+
+      // Abrir modal de configurações
+      document.addEventListener("DOMContentLoaded", function () {
+        const configBtn = document.querySelector('[title="Configurações"]');
+        const configModal = new bootstrap.Modal(
+          document.getElementById("configModal")
+        );
+
+        if (configBtn) {
+          configBtn.addEventListener("click", function () {
+            // Sincronizar tema atual com o select
+            document.getElementById("tema").value =
+              htmlElement.getAttribute("data-bs-theme");
+            configModal.show();
+          });
+        }
+
+        // Salvar configurações
+        const salvarBtn = document.getElementById("salvarConfig");
+        if (salvarBtn) {
+          salvarBtn.addEventListener("click", function () {
+            // Aqui você pode implementar a lógica de salvar
+            const tipoDiscador = document.getElementById("tipoDiscador").value;
+            const timeout = document.getElementById("timeout").value;
+            const autoAnswer = document.getElementById("autoAnswer").checked;
+            const tema = document.getElementById("tema").value;
+
+            // Atualizar badge do discador
+            document.getElementById("dialerBadge").textContent =
+              tipoDiscador.toUpperCase();
+
+            // Aplicar tema selecionado
+            htmlElement.setAttribute("data-bs-theme", tema);
+            localStorage.setItem("theme", tema);
+
+            // Simular salvamento
+            alert("Configurações salvas com sucesso!");
+            configModal.hide();
+          });
+        }
+      });
+
+      // Exemplo de uso: alterarStatus('Falando');
+    </script>
+    <script>
+      function buscarCep() {
+        let cep = document.getElementById("cep").value.replace(/\D/g, "");
+
+        if (cep.length !== 8) {
+          alert("CEP inválido! Digite um CEP com 8 dígitos.");
+          return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.erro) {
+              alert("CEP não encontrado!");
+              return;
+            }
+
+            document.getElementById("endereco").value = data.logradouro || "";
+            document.getElementById("bairro").value = data.bairro || "";
+            document.getElementById("cidade").value = data.localidade || "";
+            document.getElementById("estado").value = data.uf || "";
+
+            document.getElementById("numero").focus(); // Foca no campo Número
+          })
+          .catch(() => alert("Erro ao buscar o CEP!"));
+      }
+    </script>
+    <script>
+      const tabs = Array.from(
+        document.querySelectorAll("#pills-tab .nav-link")
+      );
+
+      const btnAnteriorFooter = document.getElementById("btnAnteriorFooter");
+      const btnProximoFooter = document.getElementById("btnProximoFooter");
+
+      function mudarAba(direcao) {
+        const atual = tabs.findIndex((tab) => tab.classList.contains("active"));
+        const proximoIndex = atual + direcao;
+
+        if (proximoIndex >= 0 && proximoIndex < tabs.length) {
+          tabs[proximoIndex].click();
+        }
+      }
+
+      if (btnAnteriorFooter)
+        btnAnteriorFooter.addEventListener("click", () => mudarAba(-1));
+      if (btnProximoFooter)
+        btnProximoFooter.addEventListener("click", () => mudarAba(1));
+    </script>
+    <script>
+      document.addEventListener("keydown", function (e) {
+        const key = e.key.toLowerCase();
+        const ctrl = e.ctrlKey || e.metaKey;
+
+        // Ctrl + → (Próxima aba)
+        if (ctrl && key === "arrowright") {
+          e.preventDefault();
+          mudarAba(1);
+        }
+
+        // Ctrl + ← (Aba anterior)
+        if (ctrl && key === "arrowleft") {
+          e.preventDefault();
+          mudarAba(-1);
+        }
+
+        // Ctrl + A → Abrir Agendamento
+        if (ctrl && key === "a") {
+          e.preventDefault();
+          const offcanvasAgendamento = document.getElementById(
+            "offcanvasAgendamento"
+          );
+          if (offcanvasAgendamento) {
+            const offcanvas = new bootstrap.Offcanvas(offcanvasAgendamento);
+            offcanvas.show();
+          }
+        }
+
+        // Ctrl + R → Abrir Recusar Atendimento
+        if (ctrl && key === "r") {
+          e.preventDefault();
+          const offcanvasRecusar = document.getElementById("offcanvasRecusar");
+          if (offcanvasRecusar) {
+            const offcanvas = new bootstrap.Offcanvas(offcanvasRecusar);
+            offcanvas.show();
+          }
+        }
+
+        // Ctrl + S → Salvar formulário (simulação)
+        if (ctrl && key === "s") {
+          e.preventDefault();
+          alert("Salvar ação executada!");
+        }
+
+        // Ctrl + T → Toggle de tema
+        if (ctrl && key === "t") {
+          e.preventDefault();
+          themeToggle.click();
+        }
+      });
+    </script>
+  </body>
+</html>

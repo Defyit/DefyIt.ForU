@@ -1,0 +1,87 @@
+// 1. Funções e mapas necessários antes de redefinir variáveis
+@import "../lib/bootstrap/scss/functions";
+
+// 2. Variáveis originais (precisa importar antes de sobrescrever)
+@import "../lib/bootstrap/scss/variables";
+
+// :root {
+//   color-scheme: light;
+//   --brand-azul: #021d49;
+//   --brand-verde: #2ad03d;
+//   --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+//     "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+//     "Segoe UI Symbol", sans-serif;
+//   --bs-primary: var(--brand-azul);
+//   --bs-success: var(--brand-verde);
+//   --bs-link-color: var(--brand-azul);
+//   --bs-link-hover-color: #031739;
+//   --bs-border-radius: 0.5rem;
+// }
+
+$primary: #2ad03d; // Verde DefyIT - vibrante, energia, ação
+$secondary: #6c757d; // Roxo elétrico - destaca botões e ícones secundários
+$success: #5a3df5; // Verde água - feedback positivo suave
+$info: #1da1f2; // Azul Twitter - limpo, comunica bem
+$warning: #ffb800; // Amarelo intenso - alertas e avisos
+$danger: #dc3545; // Vermelho moderno - erros e confirmações destrutivas
+$light: #f9fafb; // Cinza quase branco - fundos leves
+$dark: #121212; // Preto neutro - contraste e base para dark mode
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+);
+
+$form-switch-color: #2ad03d;
+$form-switch-checked-color: #fff;
+$form-switch-bg-color: #e9ecef;
+$form-switch-focus-color: rgba(42, 208, 61, 0.25);
+
+body {
+  font-family: var(--bs-body-font-family);
+}
+
+.logo-dark {
+  display: none;
+}
+
+[data-bs-theme="dark"] .logo-light {
+  display: none;
+}
+
+[data-bs-theme="dark"] .logo-dark {
+  display: block;
+}
+
+.theme-toggle .theme-icon {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+[data-bs-theme="dark"] .theme-toggle .sun-icon {
+  opacity: 0;
+  transform: scale(0.6) rotate(-25deg);
+}
+
+[data-bs-theme="dark"] .theme-toggle .moon-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-bs-theme="light"] .theme-toggle .sun-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-bs-theme="light"] .theme-toggle .moon-icon {
+  opacity: 0;
+  transform: scale(0.6) rotate(25deg);
+}
+
+// 5. Importe o Bootstrap completo
+@import "../lib/bootstrap/scss/bootstrap";

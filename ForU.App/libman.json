@@ -1,0 +1,53 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/lib/bootstrap",
+      "files": ["js/bootstrap.bundle.min.js", "scss/**"]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap-icons@1.13.1",
+      "destination": "wwwroot/lib/bootstrap-icons",
+      "files": [
+        "font/bootstrap-icons.min.css",
+        "font/fonts/bootstrap-icons.woff2",
+        "font/fonts/bootstrap-icons.woff"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@tabler/icons@1.41.2",
+      "destination": "wwwroot/lib/tabler-icons",
+      "files": [
+        "iconfont/tabler-icons.min.css",
+        "iconfont/fonts/tabler-icons.woff2",
+        "iconfont/fonts/tabler-icons.woff"
+      ]
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery",
+      "files": ["jquery.min.js"]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery-validation@1.21.0",
+      "destination": "wwwroot/lib/jquery-validation",
+      "files": ["dist/jquery.validate.min.js"]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive",
+      "files": ["jquery.validate.unobtrusive.min.js"]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sweetalert2@11.14.3",
+      "destination": "wwwroot/lib/sweetalert2",
+      "files": ["dist/sweetalert2.all.min.js", "dist/sweetalert2.min.css"]
+    }
+  ]
+}

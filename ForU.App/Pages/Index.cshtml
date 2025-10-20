@@ -1,0 +1,51 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "🟢 Atendimento";
+}
+
+<div class="container py-4">
+    <h2 class="mb-3">Botões Bootstrap 5</h2>
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <h5 class="mb-2">Padrão</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-primary">Primary</button>
+                <button type="button" class="btn btn-secondary">Secondary</button>
+                <button type="button" class="btn btn-success">Success</button>
+                <button type="button" class="btn btn-danger">Danger</button>
+                <button type="button" class="btn btn-warning">Warning</button>
+                <button type="button" class="btn btn-info">Info</button>
+                <button type="button" class="btn btn-light">Light</button>
+                <button type="button" class="btn btn-dark">Dark</button>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <h5 class="mb-2">Outline</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-primary">Primary</button>
+                <button type="button" class="btn btn-outline-secondary">Secondary</button>
+                <button type="button" class="btn btn-outline-success">Success</button>
+                <button type="button" class="btn btn-outline-danger">Danger</button>
+                <button type="button" class="btn btn-outline-warning">Warning</button>
+                <button type="button" class="btn btn-outline-info">Info</button>
+                <button type="button" class="btn btn-outline-light">Light</button>
+                <button type="button" class="btn btn-outline-dark">Dark</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    // Aguardar o evento de jQuery pronto
+        window.addEventListener('jqueryReady', function() {
+            $(document).ready(function() {
+                console.log('Agora posso usar jQuery!');
+                // Seu código jQuery aqui
+            });
+        });
+
+    </script>
+}
+
